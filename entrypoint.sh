@@ -3,6 +3,13 @@
 PASS=${ROOT_PASS:-$(pwgen -s 12 1)}
 _word=$( [ ${ROOT_PASS} ] && echo "preset" || echo "random" )
 ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+SSR_PORT=${SSR_PORT}
+SSR_PASS=${SSR_PASS}
+SSR_METHOD=${SSR_METHOD}
+SSR_OPTS=${SSR_OPTS}
+SSR_OBFS=${SSR_OBFS}
+
 echo $(date)
 echo "=> Setting a ${_word} password to the root user"
 echo "root:$PASS" | chpasswd
@@ -20,4 +27,4 @@ echo "========================================================================"
 
 nohup /usr/sbin/sshd -D &
 nohup /usr/local/bin/net_speeder eth0 "ip" >/dev/null 2>&1 &
-python /root/ssr/shadowsocks/server.py -s 0.0.0.0 -p 8388 -k pass -m chacha20 -o http_post_compatible -O auth_sha1_v4_compatible
+python /root/ssr/shadowsocks/server.py -s 0.0.0.0 -p $SSR_PORT -k $SSR_PASS -m $SSR_METHOD -o $SSR_OPTS -O $SSR_OBFS
